@@ -5,6 +5,7 @@ public abstract class Command
 {
     public abstract void ExecuteMove();
 }
+
 public class MoveCommand : Command
 {
     private

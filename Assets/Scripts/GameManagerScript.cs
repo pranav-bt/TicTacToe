@@ -18,6 +18,8 @@ public class GameManagerScript : MonoBehaviour
     public Stack<MoveCommand> Moves;
     [HideInInspector] public bool UndoInitiatedFlag = false;
     public Stack<MoveCommand> RedoCommandStack;
+    private List<(int, int)> DiagonalWinSet1;
+    private List<(int, int)> DiagonalWinSet2;
     void Start()
     {
         PlaySound(GameStartClip);
@@ -26,6 +28,8 @@ public class GameManagerScript : MonoBehaviour
         MaxGridY = GridMan.Length ;
         Moves = new Stack<MoveCommand>();
         RedoCommandStack = new Stack<MoveCommand>();
+        DiagonalWinSet1 = new List<(int, int)> { (0,0),(1,1),(2,2)};
+        DiagonalWinSet2 = new List<(int, int)> { (2,0),(1,1),(0,2)};
     }
 
     // Update is called once per frame
@@ -93,12 +97,48 @@ public class GameManagerScript : MonoBehaviour
                 GameOver(CurrentTileOccupiedByPlayer);
             }
         }
-        // Check in 4 directions
-/*        for(int i = 1; i <=4; i++)
-        {
-            for(int j = 1; j < )
-        }*/
 
+        if(DiagonalWinSet1.Contains((RowOftheLatestInputTile,ColumnOftheLatestInputTile)))
+        {
+            for(int i = 0; i< DiagonalWinSet1.Count; i++)
+            {
+                GameObject currenttile = GameObject.Find($"Tile{DiagonalWinSet1[i].Item1}{DiagonalWinSet1[i].Item2}");
+                if (currenttile.GetComponent<Tile>().OccupiedByPlayer != CurrentTileOccupiedByPlayer)
+                {
+                    WinCounter = 0;
+                    break;
+                }
+                else 
+                { 
+                    WinCounter++; 
+                }
+                if (WinCounter >= 3)
+                {
+                    GameOver(CurrentTileOccupiedByPlayer);
+                }
+            }
+        }
+
+        if (DiagonalWinSet2.Contains((RowOftheLatestInputTile, ColumnOftheLatestInputTile)))
+        {
+            for (int i = 0; i < DiagonalWinSet2.Count; i++)
+            {
+                GameObject currenttile = GameObject.Find($"Tile{DiagonalWinSet2[i].Item1}{DiagonalWinSet2[i].Item2}");
+                if (currenttile.GetComponent<Tile>().OccupiedByPlayer != CurrentTileOccupiedByPlayer)
+                {
+                    WinCounter = 0;
+                    break;
+                }
+                else
+                {
+                    WinCounter++;
+                }
+                if (WinCounter >= 3)
+                {
+                    GameOver(CurrentTileOccupiedByPlayer);
+                }
+            }
+        }
     }
 
     private void GameOver(int CurrentTileOccupiedByPlayer)
