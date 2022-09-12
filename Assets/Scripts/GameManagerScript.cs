@@ -12,27 +12,26 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private AudioClip GameStartClip;
     [SerializeField] private TextMeshProUGUI WinText;
     [HideInInspector] public bool IsGameOver = false;
-    public Stack<int> Xmoves;
-    public Stack<int> Ymoves;
-    public int CurrentplayerIndex = 1;
-    private int MaxGridX;
-    private int MaxGridY;
+    [HideInInspector] public int CurrentplayerIndex = 1;
+    [HideInInspector]public int MaxGridX;
+    [HideInInspector]public int MaxGridY;
     public Stack<MoveCommand> Moves;
+    [HideInInspector] public bool UndoInitiatedFlag = false;
+    public Stack<MoveCommand> RedoCommandStack;
     void Start()
     {
         PlaySound(GameStartClip);
         var GridMan = FindObjectOfType<GridManager>();
         MaxGridX = GridMan.Width ;
         MaxGridY = GridMan.Length ;
-        Xmoves = new Stack<int>();
-        Ymoves = new Stack<int>();
         Moves = new Stack<MoveCommand>();
+        RedoCommandStack = new Stack<MoveCommand>();
     }
 
     // Update is called once per frame
-    void Update()
+    public void ClearRedoStack()
     {
-        
+        RedoCommandStack.Clear();
     }
 
     public void ChangePlayerTurn()
@@ -49,6 +48,10 @@ public class GameManagerScript : MonoBehaviour
     }
     public void WinConditionCheck(int RowOftheLatestInputTile, int ColumnOftheLatestInputTile, int CurrentTileOccupiedByPlayer)
     {
+        if (Moves.Count == MaxGridX * MaxGridY)
+        {
+            GameOver(0);
+        }
         int WinCounter = 0;
         // Check Vertical Win Condition
         for(int i = 0; i < MaxGridX; i++)
@@ -102,7 +105,14 @@ public class GameManagerScript : MonoBehaviour
     {
         IsGameOver = true;
         StartCoroutine("RestartGameAfterSeconds");
-        WinText.text = $"Player{CurrentTileOccupiedByPlayer} Wins";
+        if (CurrentTileOccupiedByPlayer == 0)
+        {
+            WinText.text = "DRAW!";
+        }
+        else 
+        { 
+            WinText.text = $"Player{CurrentTileOccupiedByPlayer} Wins"; 
+        }
         Debug.Log($"Player{CurrentTileOccupiedByPlayer} Wins");
     }
 

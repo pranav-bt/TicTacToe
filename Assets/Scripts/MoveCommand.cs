@@ -1,28 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MoveCommand
+public abstract class Command
+{
+    public abstract void ExecuteMove();
+}
+public class MoveCommand : Command
 {
     private
     Tile tileunit;
-    Sprite PreviousSprite;
     int previousx;
     int previousy;
     public
-    MoveCommand(Tile currenttile, int prevX, int prevY, Sprite prevsprite)
+    MoveCommand(Tile currenttile, int prevX, int prevY)
     {
-        PreviousSprite = prevsprite;
         tileunit = currenttile;
         previousx = prevX;
         previousy = prevY;
     }
-
     public int GetX()
     {
         return previousx;
     }
-
     public int GetY()
     {
         return previousy;
@@ -31,17 +30,16 @@ public class MoveCommand
     {
         return tileunit;
     }
-    public Sprite GetSprite()
-    {
-        return PreviousSprite;
-    }
-    public void ExecuteMove()
+    public override void ExecuteMove()
     {
         tileunit.ExecuteTileMove(this);
     }
-
-    public void Undo()
+   public void Undo()
     {
-
+        tileunit.UndoTileMove();
+    }
+    public void Redo()
+    {
+        tileunit.RedoTileMove();
     }
 }

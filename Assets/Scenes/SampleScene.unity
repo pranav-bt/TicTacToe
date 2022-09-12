@@ -848,8 +848,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1841581764}
-        m_TargetAssemblyTypeName: ButtonScripts, Assembly-CSharp
-        m_MethodName: Redo
+        m_TargetAssemblyTypeName: UndoRedoLogic, Assembly-CSharp
+        m_MethodName: RedoButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1274,8 +1274,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1841581764}
-        m_TargetAssemblyTypeName: ButtonScripts, Assembly-CSharp
-        m_MethodName: Undo
+        m_TargetAssemblyTypeName: UndoRedoLogic, Assembly-CSharp
+        m_MethodName: UndoButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2014,7 +2014,9 @@ MonoBehaviour:
   CurrentPlayerText: {fileID: 1865448913}
   GameStartClip: {fileID: 8300000, guid: afa94906a6d9c4e40af94e83e46f9f79, type: 3}
   WinText: {fileID: 1739625979}
+  IsGameOver: 0
   CurrentplayerIndex: 1
+  UndoInitiatedFlag: 0
 --- !u!114 &1841581764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2028,8 +2030,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameManager: {fileID: 1841581763}
-  UndoInitiatedFlag: 0
-  RedoStackCorrect: 1
 --- !u!82 &1841581765
 AudioSource:
   m_ObjectHideFlags: 0

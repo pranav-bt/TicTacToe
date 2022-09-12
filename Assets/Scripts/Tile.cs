@@ -13,13 +13,13 @@ public class Tile : MonoBehaviour
     public int Column = 0;
     [SerializeField] public AudioClip ClickSoundEffect;
     [SerializeField] private GameManagerScript GameManager;
-    [SerializeField] private UndoRedoLogic UndoRedoMethods;
     [SerializeField] public GameObject TileData;
     [SerializeField] private Sprite Player1Sprite;
     [SerializeField] private Sprite Player2Sprite;
     public bool IsOccupied = false;
     [HideInInspector]public int PreviouslyOccupiedByPlayer;
-    [HideInInspector] public int OccupiedByPlayer;
+    [HideInInspector]public int OccupiedByPlayer;
+    [HideInInspector]private Sprite PreviousSprite;
     
     public void SetColor()
     {
@@ -49,9 +49,8 @@ public class Tile : MonoBehaviour
     {
         if (!IsOccupied && !GameManager.IsGameOver)
         {
-            MoveCommand NewMove = new MoveCommand(this, Row, Column, GetMoveSprite());
+            MoveCommand NewMove = new MoveCommand(this, Row, Column);
             NewMove.ExecuteMove();
-            //ExecuteTileMove();
         }
     }
 
@@ -69,6 +68,7 @@ public class Tile : MonoBehaviour
 
     public void ExecuteTileMove(MoveCommand move)
     {
+        PreviousSprite = GetMoveSprite();
         if (GameManager.CurrentplayerIndex == 1)
         {
             TileData.SetActive(true);
@@ -84,32 +84,54 @@ public class Tile : MonoBehaviour
             OccupiedByPlayer = 2;
         }
 
-        GameManager.Xmoves.Push(Row);
-        GameManager.Ymoves.Push(Column);
         GameManager.Moves.Push(move);
         GameManager.WinConditionCheck(Row, Column, OccupiedByPlayer);
         GameManager.ChangePlayerTurn();
         GameManager.PlaySound(ClickSoundEffect);
-        if (UndoRedoMethods.UndoInitiatedFlag == true)
+        if (GameManager.UndoInitiatedFlag == true)
         {
-            UndoRedoMethods.ClearRedoStack();
+            GameManager.ClearRedoStack();
         }
     }
 
     public void UndoTileMove()
     {
+        if (!GameManager.IsGameOver)
+        {
+            PreviouslyOccupiedByPlayer = OccupiedByPlayer;
+            EraseTileData(this.gameObject);
+            GameManager.ChangePlayerTurn();
+            GameManager.UndoInitiatedFlag = true;
+        }
+    }
 
+    private void EraseTileData(GameObject tileToUndo)
+    {
+        IsOccupied = false;
+        TileData.SetActive(false);
+        OccupiedByPlayer = 0;
     }
 
     public void RedoTileMove()
     {
-        
+        if (!IsOccupied)
+        {
+            RestoreTile();
+            GameManager.ChangePlayerTurn();
+        }
+    }
+
+    private void RestoreTile()
+    {
+        TileData.GetComponent<SpriteRenderer>().sprite = PreviousSprite;
+        OccupiedByPlayer = PreviouslyOccupiedByPlayer;
+        IsOccupied = true;
+        TileData.SetActive(true);
     }
 
     void Start()
     {
         GameManager = FindObjectOfType<GameManagerScript>();
-        UndoRedoMethods = FindObjectOfType<UndoRedoLogic>();
     }
 
     // Update is called once per frame
