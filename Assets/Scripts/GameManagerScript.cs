@@ -8,6 +8,8 @@ public class GameManagerScript : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] public (int,int) WinConditions;
+    [SerializeField] AudioClip WinSound;
+    [SerializeField] AudioClip ClickSoundEffect;
     [SerializeField] private GameObject CurrentPlayerText;
     [SerializeField] private AudioClip GameStartClip;
     [SerializeField] private TextMeshProUGUI WinText;
@@ -139,19 +141,25 @@ public class GameManagerScript : MonoBehaviour
                 }
             }
         }
+
+        if (!IsGameOver)
+        { 
+            PlaySound(ClickSoundEffect); 
+        }
     }
 
     private void GameOver(int CurrentTileOccupiedByPlayer)
     {
         IsGameOver = true;
+        PlaySound(WinSound);
         StartCoroutine("RestartGameAfterSeconds");
         if (CurrentTileOccupiedByPlayer == 0)
         {
-            WinText.text = "DRAW!";
+            WinText.text = "DRAW! \n Restarting Game...";
         }
         else 
         { 
-            WinText.text = $"Player{CurrentTileOccupiedByPlayer} Wins"; 
+            WinText.text = $"Player{CurrentTileOccupiedByPlayer} Wins \n Restarting Game..."; 
         }
         Debug.Log($"Player{CurrentTileOccupiedByPlayer} Wins");
     }
@@ -163,14 +171,14 @@ public class GameManagerScript : MonoBehaviour
 
     public void RestartGame()
     {
-        if (IsGameOver)
-        { SceneManager.LoadScene(0); }
+        SceneManager.LoadScene(0);
         IsGameOver = false;
     }
 
     IEnumerator RestartGameAfterSeconds()
     {
-        yield return new WaitForSeconds(5);
-        RestartGame();
+        yield return new WaitForSeconds(2.5f);
+        SceneManager.LoadScene(0);
+        IsGameOver = false;
     }
 }

@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private GameObject MouseHighlight;
     public int Row = 0;
     public int Column = 0;
-    [SerializeField] public AudioClip ClickSoundEffect;
+
     [SerializeField] private GameManagerScript GameManager;
     [SerializeField] public GameObject TileData;
     [SerializeField] private Sprite Player1Sprite;
@@ -87,7 +87,6 @@ public class Tile : MonoBehaviour
         GameManager.Moves.Push(move);
         GameManager.WinConditionCheck(Row, Column, OccupiedByPlayer);
         GameManager.ChangePlayerTurn();
-        GameManager.PlaySound(ClickSoundEffect);
         if (GameManager.UndoInitiatedFlag == true)
         {
             GameManager.ClearRedoStack();

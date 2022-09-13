@@ -6,6 +6,7 @@ using UnityEngine;
 public class ButtonScript : MonoBehaviour
 {
     [SerializeField] GameManagerScript GameManager;
+    [SerializeField] AudioClip UndoRedoSound;
     // Start is called before the first frame update
     public void UndoButton()
     {
@@ -13,6 +14,7 @@ public class ButtonScript : MonoBehaviour
         {
             MoveCommand MovetoUndo = GameManager.Moves.Pop();
             MovetoUndo.Undo();
+            GameManager.PlaySound(UndoRedoSound);
             GameManager.RedoCommandStack.Push(MovetoUndo);
         }
     }
@@ -22,7 +24,13 @@ public class ButtonScript : MonoBehaviour
         {
             MoveCommand MovetoRedo = GameManager.RedoCommandStack.Pop();
             MovetoRedo.Redo();
+            GameManager.PlaySound(UndoRedoSound);
             GameManager.Moves.Push(MovetoRedo);
         }
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

@@ -160,7 +160,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0.82210016, b: 1, a: 1}
   m_FlipX: 0
@@ -192,11 +192,11 @@ MonoBehaviour:
   Column: 3
   ClickSoundEffect: {fileID: 8300000, guid: 06244b39bc69eaa44bce16c2ee508c5a, type: 3}
   GameManager: {fileID: 0}
-  UndoRedoMethods: {fileID: 0}
   TileData: {fileID: 8843209936335380914}
   Player1Sprite: {fileID: 21300000, guid: f83e9462d8dbe654b9dc1ea2294dba0d, type: 3}
   Player2Sprite: {fileID: 21300000, guid: a1b36335edc21804d8483d19058e387c, type: 3}
   IsOccupied: 0
+  PreviouslyOccupiedByPlayer: 0
   OccupiedByPlayer: 0
 --- !u!61 &3944193002724132119
 BoxCollider2D:
@@ -296,7 +296,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
